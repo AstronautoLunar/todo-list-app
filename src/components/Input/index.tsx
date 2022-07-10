@@ -5,6 +5,8 @@ import Animated, {
   withTiming,
   withSequence
 } from "react-native-reanimated";
+import { useState } from "react";
+import { Alert } from "react-native";
 
 // Components
 import { 
@@ -20,8 +22,16 @@ import { Ionicons } from '@expo/vector-icons';
 // Styles
 import colors from "../../styles/colors";
 
+// Contexts
+import { useTask } from "../../contexts/TaskContext";
+
+// Utils
+import generateId from "../../utils/generateId";
+
 export default function Input() {
   const scaleAnimated = useSharedValue(1);
+  const [ valueInput, setValueInput ] = useState("");
+  const { addTask } = useTask();
 
   const styleIcon = useAnimatedStyle(() => {
     
@@ -33,15 +43,30 @@ export default function Input() {
   });
 
   function sendTask() {
-    scaleAnimated.value = withSequence(
-      withTiming(0.8, { duration: 200 }),
-      withTiming(1, { duration: 200 }),
-    )
+    try {
+      scaleAnimated.value = withSequence(
+        withTiming(0.8, { duration: 200 }),
+        withTiming(1, { duration: 200 }),
+      );
+  
+      addTask({
+        id: generateId(),
+        text: valueInput,
+        checked: false
+      });
+  
+      setValueInput("");
+    } catch (error) {
+      Alert.alert("Error ao enviar a tarefa para a lista");
+    }
   }
 
   return (
     <Area>
-      <AreaInput/>
+      <AreaInput
+        value={valueInput}
+        onChangeText={setValueInput}
+      />
 
       <PressArea onPress={sendTask}>
         <AreaButtonSend>

@@ -21,7 +21,6 @@ export default function ListTasks({ data }: ListTasksProps) {
       renderItem={({ item }) => (
         <Task
           id={item.id} 
-          checked={item.checked}
         >
           { item.text }
         </Task>

@@ -19,6 +19,8 @@ export const Text = styled.Text`
   font-weight: bold;
 
   color: ${colors.percentage30};
+
+  flex: 1;
 `;
 
 

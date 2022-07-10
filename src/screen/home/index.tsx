@@ -1,29 +1,17 @@
+// Components
 import { Screen, ListTasks, Input } from "../../components";
 
-const data = [
-  {
-    id: "01",
-    text: "Varrer a casa",
-    checked: false
-  },
-  {
-    id: "02",
-    text: "Limpar",
-    checked: false
-  },
-  {
-    id: "03",
-    text: "Fazer a tarefa",
-    checked: false
-  },
-];
+// Contexts
+import { useTask } from "../../contexts/TaskContext";
 
 export default function HomeScreen() {
+  const { tasks } = useTask();
+
   return (
     <Screen>
       <Input/>
       <ListTasks
-        data={data}
+        data={tasks}
       />
     </Screen>
   )

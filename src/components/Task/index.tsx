@@ -1,7 +1,5 @@
 // Core
-import { useState } from "react";
-import 
-Animated, { useSharedValue, useAnimatedStyle, withTiming, interpolateColor } from "react-native-reanimated";
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, interpolateColor } from "react-native-reanimated";
 import colors from "../../styles/colors";
 
 // Components
@@ -14,10 +12,14 @@ import {
 
 // Icons
 import { Entypo } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
+
+// Contexts
+import { useTask } from "../../contexts/TaskContext";
+import { Alert } from "react-native";
 
 type TaskProps = {
   children?: string;
-  checked?: boolean;
   id: string;
 }
 
@@ -25,10 +27,9 @@ const AreaCheckboxAnimated = Animated.createAnimatedComponent(AreaCheckbox);
 
 export default function Task({ 
   children, 
-  checked = false,
   id
 }: TaskProps) {
-  const [ newChecked, setNewChecked ] = useState(checked);
+  const { handleCheck, findTask, deleteTask } = useTask();
   const colorAreaCheck = useSharedValue(1);
 
   const checkedAreaStyle = useAnimatedStyle(() => {
@@ -39,13 +40,27 @@ export default function Task({
   });
 
   function handleChecked() {
-    setNewChecked(!newChecked);
-
-    if (newChecked) {
-      colorAreaCheck.value = withTiming(1, { duration: 200 });
-    } else {
-      colorAreaCheck.value = withTiming(0, { duration: 200 });
+    try {
+      const taskSelected = findTask(id);
+  
+      if (!!taskSelected) {
+        handleCheck(id, !taskSelected.checked)
+        
+        if (taskSelected.checked) {
+          colorAreaCheck.value = withTiming(1, { duration: 200 });
+        } else {
+          colorAreaCheck.value = withTiming(0, { duration: 200 });
+        }
+      } else {
+        Alert.alert("Não foi possível marcar a tarefa como concluída");
+      }
+    } catch (error) {
+      Alert.alert("Error ao marcar a tarefa como concluída");
     }
+  }
+
+  function handleDelete() {
+    deleteTask(id);
   }
 
   return (
@@ -63,6 +78,13 @@ export default function Task({
         <Text>
           { children }
         </Text>
+        <PressArea onPress={handleDelete}>
+          <Feather
+            name="delete" 
+            size={32} 
+            color="#ff0000aa" 
+          />
+        </PressArea>
       </Area>
     </PressArea>
   )
