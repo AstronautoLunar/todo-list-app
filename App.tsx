@@ -4,8 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // Screens
-import HomeScreen from './src/screen/home';
-import OptionsScreen from './src/screen/options';
+import HomeScreen from './src/screens/home';
+import OptionsScreen from './src/screens/options';
 
 // Types
 import RootParamsTabBottomTypes from './src/types/RootParamsTabBottomTypes';
@@ -73,7 +73,18 @@ export default function App() {
                     size={size} 
                     color={focused ? colors.percentage10 : colors.percentage30 } 
                   />
-                )
+                ),
+                headerShown: true,
+                headerStyle: {
+                  backgroundColor: colors.percentage60,
+                  borderBottomColor: `${colors.percentage30}50`,
+                  borderBottomWidth: 2,
+                },
+                headerTitleAlign: "center",
+                headerTitle: "Configurações",
+                headerTitleStyle: {
+                  color: colors.percentage30,
+                },
               }}
             />
           </BottomTab.Navigator>
