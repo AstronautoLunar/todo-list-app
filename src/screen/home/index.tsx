@@ -1,3 +1,6 @@
+// Core
+import { useEffect } from "react";
+
 // Components
 import { Screen, ListTasks, Input } from "../../components";
 
@@ -5,7 +8,11 @@ import { Screen, ListTasks, Input } from "../../components";
 import { useTask } from "../../contexts/TaskContext";
 
 export default function HomeScreen() {
-  const { tasks } = useTask();
+  const { tasks, toRestoreTasks } = useTask();
+
+  useEffect(() => {
+    toRestoreTasks();
+  }, [ ]);
 
   return (
     <Screen>

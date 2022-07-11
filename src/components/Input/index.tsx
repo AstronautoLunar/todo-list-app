@@ -5,7 +5,7 @@ import Animated, {
   withTiming,
   withSequence
 } from "react-native-reanimated";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Alert } from "react-native";
 
 // Components
@@ -31,7 +31,7 @@ import generateId from "../../utils/generateId";
 export default function Input() {
   const scaleAnimated = useSharedValue(1);
   const [ valueInput, setValueInput ] = useState("");
-  const { addTask } = useTask();
+  const { addTask, tasks } = useTask();
 
   const styleIcon = useAnimatedStyle(() => {
     
@@ -54,7 +54,7 @@ export default function Input() {
         text: valueInput,
         checked: false
       });
-  
+
       setValueInput("");
     } catch (error) {
       Alert.alert("Error ao enviar a tarefa para a lista");
@@ -66,6 +66,8 @@ export default function Input() {
       <AreaInput
         value={valueInput}
         onChangeText={setValueInput}
+        placeholder="Digite sua tarefa"
+        placeholderTextColor={`${colors.percentage10}50`}
       />
 
       <PressArea onPress={sendTask}>

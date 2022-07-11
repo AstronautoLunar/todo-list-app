@@ -20,7 +20,7 @@ export default function ListTasks({ data }: ListTasksProps) {
       keyExtractor={item => item.id}
       renderItem={({ item }) => (
         <Task
-          id={item.id} 
+          id={item.id}
         >
           { item.text }
         </Task>

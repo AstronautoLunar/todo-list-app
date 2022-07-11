@@ -1,5 +1,11 @@
 // Core
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, interpolateColor } from "react-native-reanimated";
+import { useEffect } from "react";
+import Animated, { 
+  useSharedValue, 
+  useAnimatedStyle, 
+  withTiming, 
+  interpolateColor 
+} from "react-native-reanimated";
 import colors from "../../styles/colors";
 
 // Components
@@ -31,11 +37,19 @@ export default function Task({
 }: TaskProps) {
   const { handleCheck, findTask, deleteTask } = useTask();
   const colorAreaCheck = useSharedValue(1);
+  const opacityAreaButton = useSharedValue(0);
 
   const checkedAreaStyle = useAnimatedStyle(() => {
 
     return {
       backgroundColor: interpolateColor(colorAreaCheck.value, [ 0, 1 ], [ colors.percentage10, colors.percentage60 ])
+    }
+  });
+
+  const taskAreaStyle = useAnimatedStyle(() => {
+
+    return {
+      opacity: opacityAreaButton.value,
     }
   });
 
@@ -63,29 +77,35 @@ export default function Task({
     deleteTask(id);
   }
 
+  useEffect(() => {
+    opacityAreaButton.value = withTiming(1, { duration: 500 });
+  }, []);
+
   return (
     <PressArea onPress={handleChecked}>
-      <Area>
-          <AreaCheckboxAnimated
-            style={checkedAreaStyle}
-          >
-            <Entypo 
-              name="check" 
-              size={24} 
-              color={colors.percentage60}
+      <Animated.View style={taskAreaStyle}>
+        <Area>
+            <AreaCheckboxAnimated
+              style={checkedAreaStyle}
+            >
+              <Entypo 
+                name="check" 
+                size={24} 
+                color={colors.percentage60}
+              />
+            </AreaCheckboxAnimated>
+          <Text>
+            { children }
+          </Text>
+          <PressArea onPress={handleDelete}>
+            <Feather
+              name="delete" 
+              size={32} 
+              color="#ff0000aa" 
             />
-          </AreaCheckboxAnimated>
-        <Text>
-          { children }
-        </Text>
-        <PressArea onPress={handleDelete}>
-          <Feather
-            name="delete" 
-            size={32} 
-            color="#ff0000aa" 
-          />
-        </PressArea>
-      </Area>
+          </PressArea>
+        </Area>
+      </Animated.View>
     </PressArea>
   )
 }

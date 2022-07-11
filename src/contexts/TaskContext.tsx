@@ -1,6 +1,7 @@
 // Core
 import { createContext, useContext, useState } from "react";
 import { Alert } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Types
 import TaskTypes from "../types/TaskTypes";
@@ -12,6 +13,7 @@ type TaskContextTypes = {
   tasksLength: () => number;
   handleCheck: (id: string, check: boolean) => void;
   findTask: (id: string) => TaskTypes | undefined;
+  toRestoreTasks: () => void;
 }
 
 const TaskContext = createContext({} as TaskContextTypes);
@@ -23,17 +25,25 @@ type TaskProviderProps = {
 export function TaskProvider({ children }: TaskProviderProps) {
   const [ tasks, setTasks ] = useState([] as TaskTypes[]);
   
-  function addTask(task: TaskTypes): void {
+  async function addTask(task: TaskTypes) {
     try {
-      setTasks([ ...tasks, task ]);
+      const newListTasks = [ ...tasks, task ];
+
+      setTasks(newListTasks);
+
+      await AsyncStorage.setItem("@tasks", JSON.stringify(newListTasks));
     } catch (error) {
       Alert.alert("Error ao adicionar uma nova tarefa");
     }
   }
 
-  function deleteTask(id: string): void {
+  async function deleteTask(id: string) {
     try {
-      setTasks(tasks.filter(item => item.id !== id));
+      const newListTasks = tasks.filter(item => item.id !== id);
+
+      setTasks(newListTasks);
+
+      await AsyncStorage.setItem("@tasks", JSON.stringify(newListTasks));
     } catch (error) {
       Alert.alert("Error ao deletar uma nova tarefa");
     }
@@ -48,16 +58,19 @@ export function TaskProvider({ children }: TaskProviderProps) {
     }
   }
 
-  function handleCheck(id: string, check: boolean): void {
+  async function handleCheck(id: string, check: boolean) {
     try {
       const taskFoundIndex = tasks.findIndex(item => item.id === id);
       const taskFoundObject = findTask(id);
-  
+      const newListTasks = tasks;
+
       if (!!taskFoundObject) {
-        tasks[taskFoundIndex] = {
+        newListTasks[taskFoundIndex] = {
           ...taskFoundObject,
           checked: check,
         }
+
+        await AsyncStorage.setItem("@tasks", JSON.stringify(newListTasks));
       } else {
         Alert.alert("Não foi encontrado a tarefa");
       }
@@ -76,8 +89,18 @@ export function TaskProvider({ children }: TaskProviderProps) {
     }
   }
 
-  function backupTasks() {
-    
+  async function toRestoreTasks() {
+    try {
+      const tasksSaveApp = await AsyncStorage.getItem("@tasks");
+
+      if (typeof tasksSaveApp === "string") {
+        const listTasksSaved = JSON.parse(tasksSaveApp);
+
+        setTasks(listTasksSaved);
+      }
+    } catch (error) {
+      Alert.alert("Error ao restaurar tarefas salvas");
+    }
   }
 
   return (
@@ -88,7 +111,8 @@ export function TaskProvider({ children }: TaskProviderProps) {
         deleteTask,
         tasksLength,
         handleCheck,
-        findTask
+        findTask,
+        toRestoreTasks
       }}
     >
       { children }
