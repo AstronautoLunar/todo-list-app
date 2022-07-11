@@ -96,8 +96,6 @@ export function TaskProvider({ children }: TaskProviderProps) {
       if (typeof tasksSaveApp === "string") {
         const listTasksSaved = JSON.parse(tasksSaveApp);
 
-        console.log(listTasksSaved);
-
         setTasks(listTasksSaved);
       }
     } catch (error) {
