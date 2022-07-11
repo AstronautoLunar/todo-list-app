@@ -7,5 +7,5 @@ export {
   Screen,
   Task,
   ListTasks,
-  Input
+  Input,
 };

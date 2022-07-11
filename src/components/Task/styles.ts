@@ -12,6 +12,8 @@ export const Area = styled.View`
   align-items: center;
 
   padding-top: 24px;
+
+  z-index: 0;
 `;
 
 export const Text = styled.Text`

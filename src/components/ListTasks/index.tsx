@@ -14,7 +14,9 @@ export default function ListTasks({ data }: ListTasksProps) {
     <FlatList
       style={{
         width: "100%",
-        height: 100
+        paddingLeft: 24,
+        paddingRight: 24,
+        
       }}
       data={data}
       keyExtractor={item => item.id}
@@ -25,6 +27,11 @@ export default function ListTasks({ data }: ListTasksProps) {
           { item.text }
         </Task>
       )}
+      contentContainerStyle={{
+        paddingBottom: 100,
+        paddingTop: 80,
+      }}
+      showsVerticalScrollIndicator={false}
     />
   )
 }

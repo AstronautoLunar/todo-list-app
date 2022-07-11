@@ -79,6 +79,10 @@ export default function Task({
 
   useEffect(() => {
     opacityAreaButton.value = withTiming(1, { duration: 500 });
+
+    const taskSelected = findTask(id);
+
+    colorAreaCheck.value = taskSelected?.checked ? 0 : 1;
   }, []);
 
   return (

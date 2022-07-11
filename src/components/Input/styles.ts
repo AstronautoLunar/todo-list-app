@@ -1,16 +1,18 @@
 // Core
 import styled from "styled-components/native";
+import { StatusBar } from "react-native";
 
 // Styles
 import colors from "../../styles/colors";
 
-// Utils
-import showSizeApp from "../../utils/showSizeApp";
-
 export const Area = styled.View`
-  margin-top: 24px;
+  position: absolute;
+  top: ${(StatusBar.currentHeight || 0) + 24}px;
+  left: 24px;
+  right: 24px;
 
-  width: ${showSizeApp("width") - 24}px;
+  z-index: 10;
+
   height: 64px;
 
   border: 2px solid ${colors.percentage30};
@@ -20,6 +22,8 @@ export const Area = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
+  background-color: ${colors.percentage60};
 `;
 
 export const AreaInput = styled.TextInput`

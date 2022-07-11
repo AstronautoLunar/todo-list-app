@@ -2,7 +2,11 @@
 import { useEffect } from "react";
 
 // Components
-import { Screen, ListTasks, Input } from "../../components";
+import { 
+  Screen, 
+  ListTasks, 
+  Input
+} from "../../components";
 
 // Contexts
 import { useTask } from "../../contexts/TaskContext";
